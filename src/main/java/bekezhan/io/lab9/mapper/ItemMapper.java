@@ -5,6 +5,8 @@ import bekezhan.io.lab9.entity.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
     @Mapping(source = "name", target = "itemName")
@@ -16,4 +18,6 @@ public interface ItemMapper {
     @Mapping(source = "itemPrice", target = "price")
     @Mapping(source = "itemQuantity", target = "quantity")
     Item toEntity(ItemDTO dto);
+
+    List<ItemDTO> toDTOs(List<Item> items);
 }
