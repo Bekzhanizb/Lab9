@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Items List</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Items</h2>
+        <a href="/items/create" class="btn btn-primary">Add New Item</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Manufacturer</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.name}"></td>
+                    <td th:text="'$' + ${item.price}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.country != null ? item.country.name : 'N/A'}"></td>
+                    <td>
+                        <a th:href="@{/items/edit/{id}(id=${item.id})}"
+                           class="btn btn-sm btn-warning">Edit</a>
+                        <a th:href="@{/items/delete/{id}(id=${item.id})}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Create Country</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>Create New Country</h2>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <form th:action="@{/countries}" th:object="${country}" method="post">
+                <div class="mb-3">
+                    <label for="countryName" class="form-label">Country Name</label>
+                    <input type="text" class="form-control" id="countryName"
+                           th:field="*{countryName}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="countryCode" class="form-label">Country Code</label>
+                    <input type="text" class="form-control" id="countryCode"
+                           th:field="*{countryCode}" maxlength="10" required>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="/countries" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

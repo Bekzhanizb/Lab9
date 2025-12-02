@@ -35,8 +35,20 @@ public class ItemServiceImp implements ItemService {
     }
 
     @Override
+
     public Item create(ItemDTO itemDTO) {
-        return itemRepository.save(itemMapper.toEntity(itemDTO));
+        Long countryId = itemDTO.getCountryId();
+        if (countryId == null) {
+            throw new IllegalArgumentException("Country ID must not be null");
+        }
+
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new RuntimeException("Country not found with id: " + countryId));
+
+        Item item = itemMapper.toEntity(itemDTO);
+        item.setCountry(country);
+
+        return itemRepository.save(item);
     }
 
     @Override

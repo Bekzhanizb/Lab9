@@ -1,39 +1,62 @@
 package bekezhan.io.lab9.controller;
 
 import bekezhan.io.lab9.dto.ItemDTO;
-import bekezhan.io.lab9.mapper.ItemMapper;
+import bekezhan.io.lab9.service.CountryService;
 import bekezhan.io.lab9.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/items")
+@Controller
+@RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemMapper itemMapper;
+
     private final ItemService itemService;
+    private final CountryService countryService;
 
     @GetMapping
-    public List<ItemDTO> findAll() {
-        return itemMapper.toDTOs(itemService.findAll());
+    public String getAllItems(Model model) {
+        model.addAttribute("items", itemService.findAll());
+        return "items/list";
     }
 
     @GetMapping("/{id}")
-    public ItemDTO getById(@PathVariable Long id) {
-        return itemService.findById(id);
+    public String getItemById(@PathVariable Long id, Model model) {
+        model.addAttribute("item", itemService.findById(id));
+        return "items/view";
     }
+
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("item", new ItemDTO());
+        model.addAttribute("countries", countryService.findAll());
+        return "items/create";
+    }
+
     @PostMapping
-    public ItemDTO create(@RequestBody ItemDTO itemDTO) {
-        return itemMapper.toDTO(itemService.create(itemDTO));
+    public String createItem(@ModelAttribute ItemDTO itemDTO) {
+        itemService.create(itemDTO);
+        return "redirect:/items";
     }
-    @PutMapping("/{id}")
-    public ItemDTO update(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
-        return  itemMapper.toDTO(itemService.update(id, itemDTO));
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("item", itemService.findById(id));
+        model.addAttribute("countries", countryService.findAll());
+        return "items/edit";
     }
-    @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Long id) {
-        return itemService.deleteById(id);
+
+    @PostMapping("/update/{id}")
+    public String updateItem(@PathVariable Long id, @ModelAttribute ItemDTO itemDTO) {
+        itemService.update(id, itemDTO);
+        return "redirect:/items";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteItem(@PathVariable Long id) {
+        itemService.deleteById(id);
+        return "redirect:/items";
     }
 }
