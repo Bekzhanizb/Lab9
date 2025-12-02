@@ -35,6 +35,11 @@ public class ItemServiceImp implements ItemService {
     }
 
     @Override
+    public Item create(ItemDTO itemDTO) {
+        return itemRepository.save(itemMapper.toEntity(itemDTO));
+    }
+
+    @Override
     public Item update(Long id, ItemDTO dto) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Item with id " + id + " not found!"));
 

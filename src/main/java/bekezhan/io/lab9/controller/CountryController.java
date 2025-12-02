@@ -2,13 +2,9 @@ package bekezhan.io.lab9.controller;
 
 import bekezhan.io.lab9.dto.CountryDTO;
 import bekezhan.io.lab9.mapper.CountryMapper;
-import bekezhan.io.lab9.service.CountryService;
 import bekezhan.io.lab9.service.CountryServiceImp;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CountryController {
 
-    private final CountryServiceImp  countryService;
+    private final CountryServiceImp countryService;
     private final CountryMapper countryMapper;
 
     @GetMapping
@@ -25,8 +21,23 @@ public class CountryController {
         return countryMapper.toDTOs(countryService.findAll());
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public CountryDTO getCountryById(@PathVariable Long id) {
         return countryService.findById(id);
+    }
+
+    @PostMapping
+    public CountryDTO createCountry(@RequestBody CountryDTO countryDTO) {
+        return countryMapper.toDTO(countryService.save(countryDTO));
+    }
+
+    @PutMapping("/{id}")
+    public CountryDTO updateCountry(@PathVariable Long id, @RequestBody CountryDTO countryDTO) {
+        return countryMapper.toDTO(countryService.update(id, countryDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCountryById(@PathVariable Long id) {
+        countryService.deleteById(id);
     }
 }

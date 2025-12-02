@@ -8,6 +8,7 @@ import java.util.List;
 public interface ItemService {
     List<Item> findAll();
     ItemDTO findById(Long id);
+    Item create(ItemDTO itemDTO);
     List<Item> findByCountryId(Long id);
     Item update(Long id, ItemDTO dto);
     boolean deleteById(Long id);
