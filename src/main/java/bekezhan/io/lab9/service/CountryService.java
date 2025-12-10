@@ -6,7 +6,7 @@ import bekezhan.io.lab9.entity.Country;
 import java.util.List;
 
 public interface CountryService {
-    List<CountryDTO> findAll();
+    List<Country> findAll();
     CountryDTO findById(Long id);
     Country save(CountryDTO countryDTO);
     Country update(Long id, CountryDTO dto);

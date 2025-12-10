@@ -2,6 +2,7 @@ package bekezhan.io.lab9.service;
 
 import bekezhan.io.lab9.dto.CountryDTO;
 import bekezhan.io.lab9.entity.Country;
+import bekezhan.io.lab9.mapper.CountryMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,12 @@ class CountryServiceTest {
     @Autowired
     private CountryServiceImp countryService;
 
+    @Autowired
+    private CountryMapper countryMapper;
+
     @Test
     void testFindAll() {
-        List<CountryDTO> list = countryService.findAll();
+        List<CountryDTO> list = countryMapper.toDTOs(countryService.findAll());
 
         Assertions.assertNotNull(list);
 
