@@ -18,8 +18,8 @@ public class CountryServiceImp implements CountryService {
     private final CountryMapper countryMapper;
 
     @Override
-    public List<Country> findAll() {
-        return countryRepository.findAll();
+    public List<CountryDTO> findAll() {
+        return countryMapper.toDTOs(countryRepository.findAll());
     }
 
     @Override

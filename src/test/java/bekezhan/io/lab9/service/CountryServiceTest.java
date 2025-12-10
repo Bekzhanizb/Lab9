@@ -9,29 +9,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 class CountryServiceTest {
 
     @Autowired
-    private CountryService countryService;
+    private CountryServiceImp countryService;
 
     @Test
     void testFindAll() {
-        List<Country> list = countryService.findAll();
+        List<CountryDTO> list = countryService.findAll();
+
         Assertions.assertNotNull(list);
-        Assertions.assertTrue(list.size() > 0);
+
+        Assertions.assertFalse(list.isEmpty());
+
+        for(CountryDTO dto : list) {
+            Assertions.assertNotNull(dto);
+            Assertions.assertNotNull(dto.getId());
+            Assertions.assertNotNull(dto.getCountryName());
+            Assertions.assertNotNull(dto.getCountryCode());
+        }
     }
 
     @Test
     void testFindById() {
-        CountryDTO dto = countryService.findById(1L);
-        Assertions.assertNotNull(dto);
-        Assertions.assertEquals(1L, dto.getId());
-    }
+        Random random = new Random();
+        Long randomIndex = random.nextLong(countryService.findAll().size());
 
-    @Test
-    void testFindByIdNotFound() {
+        CountryDTO dto = countryService.findById(randomIndex);
+
+        Assertions.assertNotNull(dto);
+
+        Assertions.assertEquals(randomIndex, dto.getId());
+
+        Assertions.assertNotNull(dto.getId());
+        Assertions.assertNotNull(dto.getCountryName());
+        Assertions.assertNotNull(dto.getCountryCode());
+
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> countryService.findById(-1L));
     }
@@ -39,28 +55,75 @@ class CountryServiceTest {
     @Test
     void testCreate() {
         CountryDTO dto = CountryDTO.builder()
-                .countryName("Testland")
-                .countryCode("TST")
+                .countryName("Test")
+                .countryCode("TSN")
                 .build();
 
         Country saved = countryService.save(dto);
 
         Assertions.assertNotNull(saved.getId());
-        Assertions.assertEquals("Testland", saved.getName());
+        Assertions.assertNotNull(saved.getName());
+        Assertions.assertNotNull(saved.getCode());
+
+        Assertions.assertEquals(dto.getCountryName(), saved.getName());
+        Assertions.assertEquals(dto.getCountryCode(), saved.getCode());
     }
 
     @Test
     void testUpdate() {
-        CountryDTO dto = new CountryDTO(null, "UpdatedName", "UPD");
+        CountryDTO newCountry = CountryDTO.builder()
+                .countryName("Original")
+                .countryCode("ORG")
+                .build();
 
-        Country updated = countryService.update(1L, dto);
+        Country saved = countryService.save(newCountry);
+        Long savedId = saved.getId();
 
-        Assertions.assertEquals("UpdatedName", updated.getName());
+        CountryDTO dto = CountryDTO.builder()
+                .id(savedId)
+                .countryName("Updated")
+                .countryCode("UPD")
+                .build();
+
+        Country updated = countryService.update(savedId, dto);
+
+        Assertions.assertNotNull(updated);
+        Assertions.assertNotNull(updated.getId());
+        Assertions.assertNotNull(updated.getName());
+        Assertions.assertNotNull(updated.getCode());
+
+        Assertions.assertEquals(dto.getCountryName(), updated.getName());
+        Assertions.assertEquals(dto.getCountryCode(), updated.getCode());
+
+        Assertions.assertEquals(dto.getCountryName(), updated.getName());
+
+        CountryDTO dto2 = countryService.findById(updated.getId());
+        Assertions.assertNotNull(dto2);
+        Assertions.assertNotNull(dto2.getId());
+        Assertions.assertNotNull(dto2.getCountryName());
+        Assertions.assertNotNull(dto2.getCountryCode());
+
+        Assertions.assertEquals(dto2.getId(), dto.getId());
+        Assertions.assertEquals(dto2.getCountryName(), dto.getCountryName());
+        Assertions.assertEquals(dto2.getCountryCode(), dto.getCountryCode());
     }
 
     @Test
     void testDelete() {
-        boolean deleted = countryService.deleteById(1L);
+        CountryDTO newCountry = CountryDTO.builder()
+                .countryName("Delete")
+                .countryCode("DEL")
+                .build();
+
+        Country saved = countryService.save(newCountry);
+        Long savedId = saved.getId();
+
+        boolean deleted = countryService.deleteById(saved.getId());
         Assertions.assertTrue(deleted);
+
+
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> countryService.findById(savedId));
+
     }
 }
