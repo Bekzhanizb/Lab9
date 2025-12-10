@@ -5,7 +5,6 @@ import bekezhan.io.lab9.dto.ItemDTO;
 import bekezhan.io.lab9.entity.Country;
 import bekezhan.io.lab9.entity.Item;
 import bekezhan.io.lab9.mapper.CountryMapper;
-import bekezhan.io.lab9.mapper.ItemMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
