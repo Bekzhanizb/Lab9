@@ -2,14 +2,18 @@ package bekezhan.io.lab9.mapper;
 
 import bekezhan.io.lab9.dto.CountryDTO;
 import bekezhan.io.lab9.entity.Country;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 @SpringBootTest
+@ActiveProfiles("test")
+@Transactional
 class CountryMapperTest {
 
     @Autowired

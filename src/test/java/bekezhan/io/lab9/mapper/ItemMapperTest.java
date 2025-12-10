@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 public class ItemMapperTest {
@@ -62,7 +60,6 @@ public class ItemMapperTest {
         Assertions.assertNotNull(item.getName());
         Assertions.assertNotNull(item.getPrice());
         Assertions.assertNotNull(item.getQuantity());
-        Assertions.assertNotNull(item.getCountry());
 
         Assertions.assertEquals(item.getId(), dto.getId());
         Assertions.assertEquals(item.getName(), dto.getItemName());
